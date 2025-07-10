@@ -1,0 +1,85 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class FileHandler {
+    private static final String FILE_NAME = "sample.txt";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean run = true;
+
+        while (run) {
+            System.out.println("\n--- File Handling Utility ---");
+            System.out.println("1. Write to file");
+            System.out.println("2. Read from file");
+            System.out.println("3. Modify file");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    writeFile(scanner);
+                    break;
+                case 2:
+                    readFile();
+                    break;
+                case 3:
+                    modifyFile(scanner);
+                    break;
+                case 4:
+                    run = false;
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    // Method to write to a file
+    private static void writeFile(Scanner scanner) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            System.out.print("Enter content to write: ");
+            String content = scanner.nextLine();
+            writer.write(content);
+            System.out.println("Content written to file successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to file.");
+            e.printStackTrace();
+        }
+    }
+
+    // Method to read a file
+    private static void readFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            System.out.println("\nFile Contents:");
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file.");
+            e.printStackTrace();
+        }
+    }
+
+    // Method to modify file (append content)
+    private static void modifyFile(Scanner scanner) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
+            System.out.print("Enter content to append: ");
+            String content = scanner.nextLine();
+            writer.newLine(); // Move to a new line before appending
+            writer.write(content);
+            System.out.println("Content appended successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while modifying the file.");
+            e.printStackTrace();
+        }
+    }
+}
